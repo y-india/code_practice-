@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name": "BABLU",
+        "age": 17,
+        "class": 10,
+        "roll_no": 3,
+        "father_name": "bada bablu",
+        "years_in_school": 1,
+        "school_id": "103"
+    },
+    {
+        "id": 2,
+        "name": "OPPO",
+        "age": 17,
+        "class": 10,
+        "roll_no": 4,
+        "father_name": "OPPO ka baap",
+        "years_in_school": 2,
+        "school_id": "104"
+    },
+    {
+        "id": 3,
+        "name": "CHARLIE BROWN",
+        "age": 14,
+        "class": 10,
+        "roll_no": 9,
+        "father_name": "David Brown",
+        "years_in_school": 4,
+        "school_id": "109"
+    }
+]
