@@ -31,7 +31,7 @@ def home():
 
 
 
-DATA_FILE = r"C:\Users\User\OneDrive\Desktop\fastapi\students.json"
+DATA_FILE = r"students.json"
 
 def load_data():
     if os.path.exists(DATA_FILE) and os.path.getsize(DATA_FILE) > 0:
@@ -51,6 +51,22 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=4)
+
+
+
+
+
+@app.get("/all_students")
+async def view_students():
+    data = load_data()
+    return data
+
+
+
+
+
+
+
 
 
 
