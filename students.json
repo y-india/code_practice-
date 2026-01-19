@@ -31,23 +31,13 @@
     },
     {
         "id": 4,
-        "name": "RAVAN",
+        "name": "Ravan",
         "age": 18,
         "class": 10,
         "roll_no": 17,
-        "father_name": "tera baap",
+        "father_name": "Ravan Ka Papa",
         "years_in_school": 3,
         "school_id": "1017"
-    },
-    {
-        "id": 5,
-        "name": "KANSH",
-        "age": 18,
-        "class": 10,
-        "roll_no": 27,
-        "father_name": "papa ji",
-        "years_in_school": 3,
-        "school_id": "1027"
     },
     {
         "id": 6,
@@ -78,16 +68,6 @@
         "father_name": "Testing F",
         "years_in_school": 0,
         "school_id": "1031"
-    },
-    {
-        "id": 9,
-        "name": "Ui Testing",
-        "age": 10,
-        "class": 10,
-        "roll_no": 14,
-        "father_name": "Ui Testing Father",
-        "years_in_school": 5,
-        "school_id": "1014"
     },
     {
         "id": 10,
