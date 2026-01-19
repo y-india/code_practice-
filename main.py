@@ -31,7 +31,7 @@ def home():
 
 
 
-DATA_FILE = r"C:\Users\User\OneDrive\Desktop\fastapi\students.json"
+DATA_FILE = r"students.json"
 
 def load_data():
     if os.path.exists(DATA_FILE) and os.path.getsize(DATA_FILE) > 0:
@@ -51,6 +51,22 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=4)
+
+
+
+
+
+@app.get("/all_students")
+async def view_students():
+    data = load_data()
+    return data
+
+
+
+
+
+
+
 
 
 
@@ -83,11 +99,12 @@ class Student(BaseModel):
             raise ValueError("Only class 10 is allowed FOR NOW")
         return v
 
-    # Computed / transformed output
-    @model_validator(mode="after")
-    def normalize_and_compute(self):
-        self.name = self.name.upper()
-        return self
+    @field_validator("name", "father_name", mode="before")
+    @classmethod
+    def normalize_names(cls, v):
+        if not isinstance(v, str):
+            return v
+        return v.strip().title()
 
     @property
     def school_id(self):
@@ -107,6 +124,28 @@ class Student(BaseModel):
 
 
 # ENDPOINTS 
+
+
+# models for adding 
+from pydantic import BaseModel, Field
+
+class StudentCreate(BaseModel):
+    name: str
+    age: int
+    grade: str
+    school_id: str
+
+class StudentOut(BaseModel):
+    id: int
+    name: str
+    age: int
+    grade: str
+    school_id: str
+
+class CreateStudentResponse(BaseModel):
+    message: str
+    student: StudentOut
+
 
 
 @app.post("/students")
@@ -157,58 +196,61 @@ async def view_student(student_id: int):
 
 
 from typing import Optional
-# model for partial update
+from pydantic import BaseModel, Field, field_validator
+
 class StudentUpdate(BaseModel):
     name: Optional[str] = None
     age: Optional[int] = None
-    class_: Optional[int] = None
+    class_: Optional[int] = Field(None, alias="class")
     roll_no: Optional[int] = None
     father_name: Optional[str] = None
     years_in_school: Optional[int] = None
-    school_id: Optional[str] = None
 
-    @model_validator(mode="after")
-    def compute_school_id(self):
-        if self.class_ is not None and self.roll_no is not None:
-            self.school_id = f"{self.class_}{self.roll_no}"
-        return self
-
-
+    @field_validator("name", "father_name", mode="before")
+    @classmethod
+    def normalize_names(cls, v):
+        if isinstance(v, str):
+            return v.strip().title()
+        return v
 
 
 
 
 
-
-# Update student (PUT)
 from fastapi import HTTPException
 
-@app.put("/students/{student_id}")
+@app.patch("/students/{student_id}")
 async def update_student(student_id: int, student: StudentUpdate):
     data = load_data()
-    update_data = student.model_dump(exclude_unset=True)
+    update_data = student.model_dump(exclude_unset=True, by_alias=True)
 
     for i, s in enumerate(data):
         if s["id"] == student_id:
 
-            if "school_id" in update_data:
+            new_record = {**s, **update_data}
+
+            # recompute school_id if needed
+            if "class" in update_data or "roll_no" in update_data:
+                new_school_id = f"{new_record['class']}{new_record['roll_no']}"
+
                 if any(
-                    other["school_id"] == update_data["school_id"]
+                    other["school_id"] == new_school_id
                     and other["id"] != student_id
                     for other in data
                 ):
                     raise HTTPException(
-                        status_code=400,
+                        status_code=409,
                         detail="School ID already exists"
                     )
 
-            data[i] = {**s, **update_data}
+                new_record["school_id"] = new_school_id
+
+            data[i] = new_record
             save_data(data)
 
             return {"message": "Student updated"}
 
     raise HTTPException(status_code=404, detail="Student not found")
-
 
 
 
@@ -231,7 +273,7 @@ async def delete_student(student_id: int):
 
 
 
-
+ 
 
 
 
