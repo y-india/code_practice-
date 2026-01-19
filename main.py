@@ -99,11 +99,12 @@ class Student(BaseModel):
             raise ValueError("Only class 10 is allowed FOR NOW")
         return v
 
-    # Computed / transformed output
-    @model_validator(mode="after")
-    def normalize_and_compute(self):
-        self.name = self.name.upper()
-        return self
+    @field_validator("name", "father_name", mode="before")
+    @classmethod
+    def normalize_names(cls, v):
+        if not isinstance(v, str):
+            return v
+        return v.strip().title()
 
     @property
     def school_id(self):
@@ -123,6 +124,28 @@ class Student(BaseModel):
 
 
 # ENDPOINTS 
+
+
+# models for adding 
+from pydantic import BaseModel, Field
+
+class StudentCreate(BaseModel):
+    name: str
+    age: int
+    grade: str
+    school_id: str
+
+class StudentOut(BaseModel):
+    id: int
+    name: str
+    age: int
+    grade: str
+    school_id: str
+
+class CreateStudentResponse(BaseModel):
+    message: str
+    student: StudentOut
+
 
 
 @app.post("/students")
