@@ -21,7 +21,7 @@
     },
     {
         "id": 3,
-        "name": "CHARLIE BROWN",
+        "name": "Charli Brown",
         "age": 14,
         "class": 10,
         "roll_no": 9,
@@ -78,5 +78,25 @@
         "father_name": "Ui Testing Father 2.1",
         "years_in_school": 5,
         "school_id": "1016"
+    },
+    {
+        "id": 11,
+        "name": "Naya Bacha",
+        "age": 16,
+        "class": 10,
+        "roll_no": 38,
+        "father_name": "Naya Baap",
+        "years_in_school": 0,
+        "school_id": "1038"
+    },
+    {
+        "id": 12,
+        "name": "Xxx",
+        "age": 15,
+        "class": 10,
+        "roll_no": 1,
+        "father_name": "",
+        "years_in_school": 0,
+        "school_id": "101"
     }
 ]

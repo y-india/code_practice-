@@ -1,35 +1,67 @@
-import requests
 import streamlit as st
 
-API_URL = "http://localhost:8000/students"
+# Set page configuration
+st.set_page_config(
+    page_title="School Records Portal",
+    page_icon="🎓",
+    layout="centered"
+)
 
-st.title("Add Student")
-
-name = st.text_input("Name")
-age = st.number_input("Age", min_value=15, max_value=20)
-class_value = st.number_input("Class", min_value=10, max_value=10, step=1) # for now only class 10 is allowed
-roll_no = st.number_input("Roll Number", min_value=1)
-father_name = st.text_input("Father Name")
-years_in_school = st.number_input("Years in School", min_value=0 , max_value=10)
-
-if st.button("Submit"):
-    payload = {
-        "name": name,
-        "age": age,
-        "class": class_value,
-        "roll_no": roll_no,
-        "father_name": father_name,
-        "years_in_school": years_in_school
+# Custom Styling to improve visual appeal
+st.markdown("""
+    <style>
+    .stButton button {
+        width: 100%;
+        height: 3em;
+        font-size: 20px;
     }
+    </style>
+    """, unsafe_allow_html=True)
 
-    res = requests.post(API_URL, json=payload)
+st.title("🎓 School Management System")
+st.subheader("Centralized Student Database")
+st.write("Select an action below to manage school records efficiently.")
 
-    if res.status_code == 200:
-        st.success(f"Student added with ID {res.json()['id']}")
-    elif res.status_code == 400:
-        st.error(res.json().get("detail", "Validation error"))
-    else:
-        st.error("Unexpected error")
+st.divider()
+
+# Create a 2x2 grid for the navigation buttons
+col1, col2 = st.columns(2)
+
+with col1:
+    # Add Student Section
+    if st.button("➕ Add Student", use_container_width=True):
+        st.switch_page("pages/add_student.py")
+    st.info("Add a new student in school records.")
+
+    st.write("") # Spacer
+
+    # Update Student Section
+    if st.button("✏️ Update Student Details", use_container_width=True):
+        st.switch_page("pages/update_student.py")
+    st.info("Edit or modify current student records.")
 
 
 
+
+st.write("") # Spacer
+
+
+
+
+with col2:
+    # View Student Section
+    if st.button("📋 View Student Details", use_container_width=True):
+        st.switch_page("pages/view_student.py")
+    st.info("Look up and review existing student information.")
+
+    st.write("") # Spacer
+
+    # Delete Student Section
+    if st.button("🗑️ Delete Student", use_container_width=True):
+        st.switch_page("pages/delete_student.py")
+    st.info("Remove a student from the school records.")
+
+st.divider()
+
+# Footer or Quick Stats
+st.caption("System Version 1.0.0 | Secure File Access Enabled")
