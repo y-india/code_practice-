@@ -33,4 +33,10 @@ if st.button("Submit"):
         st.error("Unexpected error")
 
 
+st.write("") # Spacer
+st.write("") # Spacer
 
+
+
+if st.button("Back To Home Page", use_container_width=True):
+        st.switch_page("app.py")
